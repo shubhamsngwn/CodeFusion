@@ -7,9 +7,7 @@ import { api_base_url } from '../helper';
 const Login = () => {
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
-
   const [error, setError] = useState("");
-
   const navigate = useNavigate();
 
   const submitForm = (e) => {
@@ -30,7 +28,7 @@ const Login = () => {
         localStorage.setItem("isLoggedIn", true);
         localStorage.setItem("userId", data.userId);
         setTimeout(() => {
-          window.location.href = "/"
+          window.location.href = "/RoomId"
         }, 200);
       } else {
         setError(data.message);
