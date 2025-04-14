@@ -139,6 +139,7 @@ footer a {
   cursor: pointer;
   transition: all 0.3s ease-in-out;
   color: black;
+  /* margin-left: 100px; */
 }
 
 .joinBtn,

@@ -7,11 +7,17 @@ import Login from './pages/Login';
 import Editior from './pages/Editior';
 import RoomId from './pages/RoomId';
 import Navbar from './components/Navbar';
-import GeminiAPI from './components/AskBot';
 import Jitsi from './components/Jitsi';
+import RoomMembers from './components/RoomMembers';
+import OtherLngCodeEditor from './components/OtherLngCodeEditor'
+
+import { io } from 'socket.io-client';
+
 
 const App = () => {
   let isLoggedIn = localStorage.getItem("isLoggedIn");
+  const socket = io("http://localhost:5000/");
+
   return (
     <>
       <BrowserRouter>
@@ -22,9 +28,10 @@ const App = () => {
           <Route path='/roomId' element={<RoomId />} />
           <Route path='/navbar' element={<Navbar />}/>
           <Route path='/jitsi' element={<Jitsi />}/>
-          <Route path='/gemini' element={<GeminiAPI />}/>
-          {/* <Route path='/editior' element={<Editior />}/> */}
-          <Route path='/editior/:projectID' element={isLoggedIn ? <Editior /> : <Navigate to="/login"/>} />
+          {/* <Route path='/home' element={<Home/>} /> */}
+          <Route path='/otherlanguages' element={<OtherLngCodeEditor />}/>
+          <Route path='/roomMembers' element={<RoomMembers />}/>
+          <Route path='/editior/:projectID' element={isLoggedIn ? <Editior socket={socket}/> : <Navigate to="/login"/>} />
           <Route path="*" element={isLoggedIn ? <Home />: <Navigate to="/login"/>} />
         </Routes>
       </BrowserRouter>

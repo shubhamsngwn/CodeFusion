@@ -6,7 +6,9 @@ import { api_base_url } from "../helper";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import GeminiChatbot from "../components/AskBot";
+// import GeminiChatbot from "../components/AskBot";
+// import { useLocation } from "react-router-dom";
+
 
 const Home = () => {
   const [data, setData] = useState(null);
@@ -15,6 +17,10 @@ const Home = () => {
   const [projTitle, setProjTitle] = useState("");
   const navigate = useNavigate();
   const [isCreateModelShow, setIsCreateModelShow] = useState(false);
+  
+  // const location = useLocation();
+  // const { username, roomId } = location.state || {};
+
 
   // Filter data based on search query
   const filteredData = data
@@ -43,35 +49,16 @@ const Home = () => {
           if (data.success) {
             setIsCreateModelShow(false);
             setProjTitle("");
-            toast.success("Project Created Successfully");
+            toast.success("Project Created Successfully\nOpening Project...", { position: "top-right", autoClose: 3000 });
             setTimeout(() => {
               navigate(`/editior/${data.projectId}`);
-            }, 2000);
+            }, 3000);
           } else {
             toast.error("Something Went Wrong");
           }
         });
     }
   };
-
-  // const getProj = () => {
-  //   fetch(api_base_url + "/getProjects", {
-  //     mode: "cors",
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({
-  //       userId: localStorage.getItem("userId")
-  //     })
-  //   }).then(res => res.json()).then(data => {
-  //     if (data.success) {
-  //       setData(data);
-  //     } else {
-  //       setError(data.message);
-  //     }
-  //   });
-  // };
 
   const getProj = () => {
     fetch(api_base_url + "/getProjects", {
@@ -122,7 +109,7 @@ const Home = () => {
       .then((data) => {
         if (data.success) {
           setUserData(data);
-          // console.log(userData.user.username);
+          // console.log("Userdata: " + userData.user.username);
         } else {
           setUserError(data.message);
         }

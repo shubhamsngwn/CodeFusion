@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { v4 as uuidV4 } from "uuid";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import logo from "../images/logo.png";
-import Editior from "./Editior";
+import socket from "../socket";
+import { v4 as uuidv4 } from 'uuid';
 
 export default function RoomId() {
   const navigate = useNavigate();
@@ -19,23 +19,32 @@ export default function RoomId() {
       });
       return;
     }
-
-    navigate(`/home`, {
-      state: { username },
+    const uuid = uuidv4();
+    socket.emit("join-room", { roomId, uuid, username }, (response) => {
+      console.log("roomid" + roomId)
+      console.log("uuid" + uuid)
+      console.log("username" + username)
+      if (response.error) {
+        toast.error(response.error, {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      } else {
+        navigate(`/home`, {
+          state: { username, roomId, uuid },
+        });
+      }
     });
-  };
-
-  const createNewRoom = (e) => {
-    e.preventDefault();
-    const id = uuidV4();
-    setRoomId(id);
-    toast.success("New Room ID Created!", { position: "top-center" });
   };
 
   const handleInputEnter = (e) => {
     if (e.key === "Enter") {
       joinRoom();
     }
+  };
+
+  const cancel = () => {
+    navigate("/home");
   };
 
   return (
@@ -60,15 +69,24 @@ export default function RoomId() {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
-          <button className="btn joinBtn" onClick={joinRoom}>
-            JOIN
-          </button>
-          <span className="createInfo">
-            If you don't have an invite, create &nbsp;
-            <a href="#" onClick={createNewRoom} className="createNewBtn">
-              Create New ROOM ID
-            </a>
-          </span>
+
+          {/* Buttons wrapper with flex */}
+          <div
+            className="buttonGroup"
+            style={{
+              display: "flex",
+              gap: "6px",
+              marginTop: "10px",
+              justifyContent: "center",
+            }}
+          >
+            <button className="btn joinBtn" onClick={joinRoom}>
+              JOIN
+            </button>
+            <button className="btn joinBtn" onClick={cancel}>
+              CANCEL
+            </button>
+          </div>
         </div>
       </div>
       <footer>

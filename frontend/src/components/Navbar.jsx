@@ -5,8 +5,6 @@ import Avatar from "react-avatar";
 import { MdLightMode } from "react-icons/md";
 import { BsGridFill } from "react-icons/bs";
 import { api_base_url, toggleClass } from "../helper";
-import { v4 as uuidv4 } from "uuid";
-import { toast } from "react-toastify";
 
 const Navbar = ({ isGridLayout, setIsGridLayout }) => {
   const navigate = useNavigate();
@@ -38,6 +36,7 @@ const Navbar = ({ isGridLayout, setIsGridLayout }) => {
     localStorage.removeItem("userId");
     localStorage.removeItem("token");
     localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("roomId");
     window.location.reload();
   };
 
@@ -51,7 +50,16 @@ const Navbar = ({ isGridLayout, setIsGridLayout }) => {
     navigate("/jitsi");
     setTimeout(() => {
       navigate("/home")
-    }, 5*60*1000);//5 min
+    }, 5*60*1000);
+  }
+
+  const handleRoomMembers = () => {
+    console.log("Testing Room Members")
+    navigate("/RoomMembers");
+  }
+
+  const handleConnect = () => {
+    navigate("/roomId")
   }
 
   return (
@@ -61,6 +69,12 @@ const Navbar = ({ isGridLayout, setIsGridLayout }) => {
           <img className="w-[150px] cursor-pointer" src={logo} alt="" />
         </div>
         <div className="links flex items-center gap-2">
+        <button
+            onClick={handleConnect}
+            className="btnBlue !bg-red-500 min-w-[120px] ml-2 hover:!bg-red-600"
+          >
+            Connect
+          </button>
         <button
             onClick={handleMockInterview}
             className="btnBlue !bg-red-500 min-w-[120px] ml-2 hover:!bg-red-600"

@@ -5,6 +5,8 @@ import Avatar from "react-avatar";
 import { MdLightMode } from "react-icons/md";
 import { BsGridFill } from "react-icons/bs";
 import { api_base_url, toggleClass } from "../helper";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const JitsiNavbar = ({ isGridLayout, setIsGridLayout }) => {
   const navigate = useNavigate();
@@ -21,15 +23,13 @@ const JitsiNavbar = ({ isGridLayout, setIsGridLayout }) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        // console.log("User Data:", data); // ✅ Debugging line
         if (data.success) {
           setData(data);
-          // console.log("Testing API data", data.user.username);
         } else {
           setError(data.message);
         }
       })
-      .catch((err) => console.error("Fetch error:", err)); // ✅ Catch network errors
+      .catch((err) => console.error("Fetch error:", err));
   }, []);
 
   const logout = () => {
@@ -40,48 +40,49 @@ const JitsiNavbar = ({ isGridLayout, setIsGridLayout }) => {
   };
 
   const toggleMode = () => {
-    console.log("Toggle Mode")
-    // const bdy = document.querySelector("#root");
-    // bdy.style.backgroundColor = "white";
-  }
+    console.log("Light Mode Enabled")
+  };
 
   const handleEndInterview = () => {
-    navigate("/home")
-  }
+    toast.success("Interview Ended", { position: "top-right", autoClose: 3000 });
+    // Delay navigation to let toast show up
+    setTimeout(() => {
+      navigate("/home");
+    }, 3500);
+  };
 
   return (
     <>
+      <ToastContainer /> {/* ✅ ToastContainer to display notifications */}
       <div className="navbar flex items-center justify-between px-[100px] h-[80px] bg-[#141414]">
         <div className="logo">
-          <img className="w-[150px] cursor-pointer" src={logo} alt="" />
+          <img className="w-[150px] cursor-pointer" src={logo} alt="Logo" />
         </div>
         <div className="links flex items-center gap-2">
-        <button
+          <button
             onClick={handleEndInterview}
             className="btnBlue !bg-red-500 min-w-[120px] ml-2 hover:!bg-red-600"
           >
             End Interview
           </button>
-          
+
           <Avatar
-            onClick={() => {
-              toggleClass(".dropDownNavbar", "hidden");
-            }}
+            onClick={() => toggleClass(".dropDownNavbar", "hidden")}
             name={data ? data.user.username : ""}
             size="40"
             round="50%"
-            className=" cursor-pointer ml-2"
+            className="cursor-pointer ml-2"
           />
         </div>
 
         <div className="dropDownNavbar hidden absolute right-[60px] top-[80px] shadow-lg shadow-black/50 p-[10px] rounded-lg bg-[#1A1919] w-[150px] h-[160px]">
           <div className="py-[10px] border-b-[1px] border-b-[#fff]">
-            <h3 className="text-[17px] test" style={{ lineHeight: 1 }}>
-              {data ? data.user.username : "else"}
+            <h3 className="text-[17px]" style={{ lineHeight: 1 }}>
+              {data ? data.user.username : "Guest"}
             </h3>
           </div>
           <i
-            onClick={toggleMode} //working on it
+            onClick={toggleMode}
             className="flex items-center gap-2 mt-3 mb-2 cursor-pointer"
             style={{ fontStyle: "normal" }}
           >
@@ -92,8 +93,7 @@ const JitsiNavbar = ({ isGridLayout, setIsGridLayout }) => {
             className="flex items-center gap-2 mt-3 mb-2 cursor-pointer"
             style={{ fontStyle: "normal" }}
           >
-            <BsGridFill className="text-[20px]" />{" "}
-            {isGridLayout ? "List" : "Grid"} layout
+            <BsGridFill className="text-[20px]" /> {isGridLayout ? "List" : "Grid"} layout
           </i>
         </div>
       </div>
