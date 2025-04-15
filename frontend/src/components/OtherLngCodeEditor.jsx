@@ -47,8 +47,8 @@ const CodeEditor = () => {
       {/* Header */}
       <div className="bg-gray-800 px-6 py-3 flex justify-between items-center border-b border-gray-700">
         <div className="flex items-center space-x-2">
-          <img src={logo} alt="CodeFusion Logo" className="w-12 h-15 object-contain" />
-          <h1 className="text-xl font-bold text-white">CodeFusion</h1>
+          <img src={logo} alt="CodeFusion Logo" className="w-36 h-15 object-contain" />
+          {/* <h1 className="text-xl font-bold text-white">CodeFusion</h1> */}
         </div>
         <div className="flex items-center space-x-4">
           <LanguageSelector language={language} onSelect={onSelect} />
